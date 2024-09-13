@@ -1,11 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: ['http://task-man-back.vercel.app/', 'https://task-man-back.vercel.app/', 'http://localhost:5000'],
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  }
+  baseURL: 'https://task-man-back.vercel.app/'
 });
 
 export const apiRequest = async (method, url, payload) => {
@@ -16,12 +12,12 @@ export const apiRequest = async (method, url, payload) => {
       data: payload,
       headers: {
         "Content-Type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("token")}`,
+        "authorization": `Bearer ${localStorage.getItem("token")}`,
       },
     });
     console.log(response.data);
     return response.data;
   } catch (error) {
-    throw error;  // Rethrow the error so it can be caught and handled by the caller
+    return error;
   }
 };
