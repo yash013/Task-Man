@@ -7,18 +7,18 @@
         "use": "@vercel/node"
       },
       {
-        "src": "client/build/**/*",
+        "src": "client/build/**",
         "use": "@vercel/static"
       }
     ],
     "routes": [
       {
         "src": "/api/(.*)",
-        "dest": "server/"
+        "dest": "server/server.js"
       },
       {
         "src": "/(.*)",
-        "dest": "/"
+        "dest": "client/build/$1"
       }
     ]
   }

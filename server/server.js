@@ -6,21 +6,23 @@ const app = express();
 const server = http.createServer(app);
 const cors = require('cors');
 
-const io = socketIo(server, {
-  cors: {
-    origin: "https://task-man-pi.vercel.app",
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-  },
-});
-
-app.use(cors({
-  origin: 'https://task-man-pi.vercel.app',
+const corsOptions = {
+  origin: ['https://task-man-pi.vercel.app', 'http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+
+// Update Socket.IO CORS configuration
+const io = socketIo(server, {
+  cors: corsOptions
+});
+
+// Make sure to apply CORS before your routes
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
