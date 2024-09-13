@@ -1,54 +1,47 @@
-require("dotenv").config();
 const express = require("express");
-const http = require("http");
-const socketIo = require('socket.io');
-const app = express();
-const server = http.createServer(app);
-// const io = socketIo(server);
-// console.log(process.env);
 const cors = require('cors');
-const io = socketIo(server, {
-  cors: {
-    origin: "https://task-man-pi.vercel.app/" , // Use environment variable for client URL
-    methods: ['GET', 'POST'],
-  },
-});
+const authMiddleware = require('./authMiddleware');
+
+const app = express();
+
+const corsOptions = {
+  origin: ['https://task-man-pi.vercel.app', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+
+// Apply CORS middleware before any routes
+app.use(cors(corsOptions));
+
+// Handle OPTIONS requests explicitly
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
-const dbConfig = require("./config/dbConfig");
-// const port = process.env.PORT || 5000;
-
-app.use(cors({
-  origin: 'https://task-man-pi.vercel.app/',
-  methods: ['GET', 'POST', 'UPDATE', 'DELETE'] ,
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
-// console.log("MongoDB_URI:", process.env.MONGODB_URI);
-
-const usersRoute = require("./routes/usersRoute");
-const projectsRoute = require("./routes/projectsRoute");
-const tasksRoute = require("./routes/tasksRoute");
-const notificationsRoute = require("./routes/notificationsRoute");
-
-app.use("/api/users", usersRoute);
-app.use("/api/projects", projectsRoute);
-app.use("/api/tasks", tasksRoute);
-app.use("/api/notifications", notificationsRoute);
-
-// Serve static files from the React app
-const path = require("path");
-dirname = path.resolve();
-app.use(express.static(path.join(dirname, 'client/build')));
-
-io.on('connection', (socket) => {
-  console.log('New client connected');
-
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
-  });
+// Debug logging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  console.log('Headers:', req.headers);
+  next();
 });
+
+// Apply auth middleware to protected routes
+app.use("/api/projects", authMiddleware, projectsRoute);
+app.use("/api/tasks", authMiddleware, tasksRoute);
+app.use("/api/notifications", authMiddleware, notificationsRoute);
+
+// The login route should not use auth middleware
+app.use("/api/users", usersRoute);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+// ... rest of your server.js code
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(dirname, "/client/build")));
@@ -57,9 +50,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// server.listen(port, () => {
-//   console.log(Server is running on port ${port});
-// });
 
 dbConfig.connection.on('connected', () => {
   console.log('MongoDB connected');
