@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/',
+  // baseURL: 'http://localhost:5000/',
+  baseURL: 'https://task-man-back.vercel.app/'
 });
 
 export const apiRequest = async (method, url, payload) => {
