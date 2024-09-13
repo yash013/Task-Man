@@ -7,7 +7,7 @@ import { getDateFormat } from "../../../utils/helpers";
 import Divider from "../../../components/Divider";
 import TaskForm from "./TaskForm";
 import { AddNotification } from "../../../apicalls/notifications";
-import socket from '../../../socket'; 
+// import socket from '../../../socket'; 
 
 function Tasks({ project }) {
   const [filters, setFilters] = useState({

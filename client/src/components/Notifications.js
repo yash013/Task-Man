@@ -14,6 +14,7 @@ function Notifications({ showNotifications, setShowNotifications }) {
   const { notifications } = useSelector((state) => state.users);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const readNotifications = async () => {
     try {
       const response = await MarkNotificationAsRead();
@@ -46,7 +47,7 @@ function Notifications({ showNotifications, setShowNotifications }) {
     if (notifications.length > 0) {
       readNotifications();
     }
-  }, [notifications]);
+  }, [notifications, readNotifications]);
 
   return (
     <Modal
