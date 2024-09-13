@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetProjectsByRole } from "../../apicalls/projects";
 import { SetLoading } from "../../redux/loadersSlice";
@@ -32,7 +32,7 @@ function Home() {
   useEffect(() => {
     getData();
   }, [getData]);
-  
+
   return (
     <div>
       <h1 className="text-primary text-gray-300 text-xl">
@@ -42,6 +42,7 @@ function Home() {
       <div className="grid grid-cols-4 gap-5 mt-5">
         {projects.map((project) => (
           <div
+            key={project._id}
             className="flex flex-col gap-1 border border-solid border-gray-400 rounded-md p-2 cursor-pointer"
             onClick={() => navigate(`/project/${project._id}`)}
           >
@@ -79,9 +80,7 @@ function Home() {
 
       {projects.length === 0 && (
         <div className="flex">
-          <h1 className="text-primary text-xl">
-               You have no projects yet
-          </h1>
+          <h1 className="text-primary text-xl">You have no projects yet</h1>
         </div>
       )}
     </div>

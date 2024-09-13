@@ -1,5 +1,5 @@
 import { Button, message, Table } from "antd";
-import React from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteProject, GetAllProjects } from "../../../apicalls/projects";
 import { SetLoading } from "../../../redux/loadersSlice";
@@ -12,8 +12,6 @@ function Projects() {
   const [show, setShow] = React.useState(false);
   const { user } = useSelector((state) => state.users);
   const dispatch = useDispatch();
-
-  
 
   const getData = useCallback(async () => {
     try {
@@ -46,7 +44,7 @@ function Projects() {
       message.error(error.message);
       dispatch(SetLoading(false));
     }
-  }
+  };
 
   React.useEffect(() => {
     getData();
@@ -77,7 +75,8 @@ function Projects() {
       render: (text, record) => {
         return (
           <div className="flex gap-4">
-            <i class="ri-delete-bin-line"
+            <i
+              className="ri-delete-bin-line"
               onClick={() => onDelete(record._id)}
             ></i>
             <i
@@ -92,6 +91,7 @@ function Projects() {
       },
     },
   ];
+
   return (
     <div>
       <div className="flex justify-end">

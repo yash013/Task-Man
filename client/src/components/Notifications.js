@@ -31,23 +31,24 @@ function Notifications({ showNotifications, setShowNotifications }) {
     }
   };
 
-  useEffect(() => {
-    const readNotifications = async () => {
-      try {
-        const response = await MarkNotificationAsRead();
-        if (response.success) {
-          console.log(response.data);
-          dispatch(SetNotifications(response.data));
-        }
-      } catch (error) {
-        message.error(error.message);
+  const readNotifications = async () => {
+    try {
+      const response = await MarkNotificationAsRead();
+      if (response.success) {
+        console.log(response.data);
+        dispatch(SetNotifications(response.data));
       }
-    };
-    
+    } catch (error) {
+      message.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+
     if (notifications.length > 0) {
       readNotifications();
     }
-  }, [notifications, readNotifications]);
+  }, [notifications, dispatch]);
 
   return (
     <Modal

@@ -1,118 +1,50 @@
-import { Button, message, Table } from "antd";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RemoveMemberFromProject } from "../../../apicalls/projects";
-import { SetLoading } from "../../../redux/loadersSlice";
-import MemberForm from "./MemberForm";
+import { GetProjectById } from "../../apicalls/projects";
+import { SetLoading } from "../../redux/loadersSlice";
+import { message } from "antd";
+import { useParams, useNavigate } from "react-router-dom";
+import Tasks from "./Tasks";
 
-function Members({ project, reloadData }) {
-  const [role, setRole] = React.useState("");
-  const [showMemberForm, setShowMemberForm] = React.useState(false);
+function ProjectInfo() {
+  const [project, setProject] = useState(null);
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.users);
 
-  const dispatch = useDispatch();
-  const isOwner = project.owner._id === user._id;
-  const deleteMember = async (memberId) => {
+  const getData = useCallback(async () => {
     try {
       dispatch(SetLoading(true));
-      const response = await RemoveMemberFromProject({
-        projectId: project._id,
-        memberId,
-      });
+      const response = await GetProjectById(id);
+      dispatch(SetLoading(false));
       if (response.success) {
-        reloadData();
-        message.success(response.message);
+        setProject(response.data);
       } else {
         throw new Error(response.message);
       }
-      dispatch(SetLoading(false));
     } catch (error) {
       dispatch(SetLoading(false));
       message.error(error.message);
+      navigate("/projects");
     }
-  };
+  }, [dispatch, id, navigate]);
 
-  const columns = [
-    {
-      title: "First Name",
-      dataIndex: "firstName",
-      render: (text, record) => record.user.firstName,
-    },
-    {
-      title: "Last Name",
-      dataIndex: "lastName",
-      render: (text, record) => record.user.lastName,
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      render: (text, record) => record.user.email,
-    },
-    {
-      title: "Role",
-      dataIndex: "role",
-      render: (text, record) => record.role.toUpperCase(),
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: (text, record) => (
-        <Button type="link" danger onClick={() => deleteMember(record._id)}>
-          Remove
-        </Button>
-      ),
-    },
-  ];
-
-  // if not owner, then don't show the action column
-  if (!isOwner) {
-    columns.pop();
-  }
+  React.useEffect(() => {
+    getData();
+  }, [getData]);
 
   return (
     <div>
-      <div className="flex justify-end">
-        {isOwner && (
-          <Button type="default" onClick={() => setShowMemberForm(true)}>
-            Add Member
-          </Button>
-        )}
-      </div>
-
-      <div
-       className="w-48"
-      >
-        <span>Select Role</span>
-        <select onChange={(e) => setRole(e.target.value)} value={role}>
-          <option value="">All</option>
-          <option value="employee">Employee</option>
-          <option value="admin">Admin</option>
-          <option value="owner">Owner</option>
-        </select>
-      </div>
-
-      <Table
-        columns={columns}
-        dataSource={project.members.filter((member) => {
-          if (role === "") {
-            return true;
-          } else {
-            return member.role === role;
-          }
-        })}
-        className="mt-4"
-      />
-
-      {showMemberForm && (
-        <MemberForm
-          showMemberForm={showMemberForm}
-          setShowMemberForm={setShowMemberForm}
-          reloadData={reloadData}
-          project={project}
-        />
+      {project && (
+        <div>
+          <h1 className="text-2xl">{project.name}</h1>
+          <p>{project.description}</p>
+          <Tasks projectId={project._id} />
+        </div>
       )}
     </div>
   );
 }
 
-export default Members;
+export default ProjectInfo;
