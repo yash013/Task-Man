@@ -1,5 +1,7 @@
 {
     "version": 2,
+    "short_name": "Task-Man",
+    "name": "Task-Man",
     "builds": [
       {
         "src": "server/server.js",
