@@ -40,7 +40,7 @@ function Login() {
         <div>
           <h1 className="text-7xl text-white">Task-Man</h1>
           <span className=" text-white mt-5">
-            Streamlining Company Operations..
+            Streamlining Company Operations...
           </span>
         </div>
       </div>
