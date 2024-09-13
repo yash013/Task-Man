@@ -13,7 +13,7 @@ function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     try {
       dispatch(SetLoading(true));
       const response = await GetProjectsByRole();
@@ -27,11 +27,12 @@ function Home() {
       dispatch(SetLoading(false));
       message.error(error.message);
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [getData]);
+  
   return (
     <div>
       <h1 className="text-primary text-gray-300 text-xl">

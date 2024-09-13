@@ -32,7 +32,7 @@ function ProtectedPage({ children }) {
     }
   };
 
-  const getNotifications = async () => {
+  const getNotifications = useCallback(async () => {
     try {
       dispatch(SetLoading(true));
       const response = await GetAllNotifications();
@@ -46,7 +46,7 @@ function ProtectedPage({ children }) {
       dispatch(SetLoading(false));
       message.error(error.message);
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -54,7 +54,7 @@ function ProtectedPage({ children }) {
     } else {
       navigate("/login");
     }
-  }, [getUser]);
+  }, [navigate]);
 
   useEffect(() => {
     if (user) {

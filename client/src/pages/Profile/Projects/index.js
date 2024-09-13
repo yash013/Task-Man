@@ -15,7 +15,7 @@ function Projects() {
 
   
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     try {
       dispatch(SetLoading(true));
       const response = await GetAllProjects({ owner: user._id });
@@ -29,7 +29,7 @@ function Projects() {
       message.error(error.message);
       dispatch(SetLoading(false));
     }
-  };
+  }, [dispatch, user._id]);
 
   const onDelete = async (id) => {
     try {
@@ -50,7 +50,7 @@ function Projects() {
 
   React.useEffect(() => {
     getData();
-  }, []);
+  }, [getData]);
 
   const columns = [
     {

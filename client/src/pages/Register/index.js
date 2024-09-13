@@ -36,7 +36,7 @@ function Register() {
     if (localStorage.getItem("token")) {
       navigate("/");
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="grid grid-cols-2">

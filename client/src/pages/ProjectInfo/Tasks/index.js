@@ -1,7 +1,7 @@
 import { Button, message, Modal, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteTask, GetAllTasks, UpdateTask } from "../../../apicalls/tasks";
+import { DeleteTask, UpdateTask } from "../../../apicalls/tasks";
 import { SetLoading } from "../../../redux/loadersSlice";
 import { getDateFormat } from "../../../utils/helpers";
 import Divider from "../../../components/Divider";
@@ -25,13 +25,10 @@ function Tasks({ project }) {
     (member) => member.role === "employee" && member.user._id === user._id
   );
 
-  const getTasks = async () => {
+  const getTasks = useCallback(async () => {
     try {
       dispatch(SetLoading(true));
-      const response = await GetAllTasks({
-        project: project._id,
-        ...filters,
-      });
+      const response = await GetTasksByProject(projectId);
       dispatch(SetLoading(false));
       if (response.success) {
         setTasks(response.data);
@@ -42,7 +39,7 @@ function Tasks({ project }) {
       dispatch(SetLoading(false));
       message.error(error.message);
     }
-  };
+  }, [dispatch, projectId]);
 
   const deleteTaks = async (id) => {
     try {
@@ -108,7 +105,7 @@ function Tasks({ project }) {
     //   socket.off('taskDeleted');
     // };
 
-  }, []);
+  }, [getTasks]);
 
   const columns = [
     {

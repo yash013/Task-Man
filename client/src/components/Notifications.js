@@ -15,18 +15,6 @@ function Notifications({ showNotifications, setShowNotifications }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const readNotifications = async () => {
-    try {
-      const response = await MarkNotificationAsRead();
-      if (response.success) {
-        console.log(response.data);
-        dispatch(SetNotifications(response.data));
-      }
-    } catch (error) {
-      message.error(error.message);
-    }
-  };
-
   const deleteAllNotifications = async () => {
     try {
       dispatch(SetLoading(true));
@@ -44,6 +32,18 @@ function Notifications({ showNotifications, setShowNotifications }) {
   };
 
   useEffect(() => {
+    const readNotifications = async () => {
+      try {
+        const response = await MarkNotificationAsRead();
+        if (response.success) {
+          console.log(response.data);
+          dispatch(SetNotifications(response.data));
+        }
+      } catch (error) {
+        message.error(error.message);
+      }
+    };
+    
     if (notifications.length > 0) {
       readNotifications();
     }
