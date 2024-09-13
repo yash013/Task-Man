@@ -7,6 +7,13 @@ const server = http.createServer(app);
 // const io = socketIo(server);
 // console.log(process.env);
 
+const io = socketIo(server, {
+  cors: {
+    origin: "https://task-man-pi.vercel.app/" , // Use environment variable for client URL
+    methods: ['GET', 'POST'],
+  },
+});
+
 app.use(express.json());
 
 const dbConfig = require("./config/dbConfig");
@@ -19,7 +26,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-console.log("MongoDB_URI:", process.env.MONGODB_URI);
+// console.log("MongoDB_URI:", process.env.MONGODB_URI);
 
 const usersRoute = require("./routes/usersRoute");
 const projectsRoute = require("./routes/projectsRoute");
@@ -31,9 +38,20 @@ app.use("/api/projects", projectsRoute);
 app.use("/api/tasks", tasksRoute);
 app.use("/api/notifications", notificationsRoute);
 
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client/build')));
 // deployment config
 const path = require("path");
 __dirname = path.resolve();
+
+
+io.on('connection', (socket) => {
+  console.log('New client connected');
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+});
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
@@ -41,14 +59,6 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
   });
 }
-
-// io.on('connection', (socket) => {
-//   console.log('New client connected');
-
-//   socket.on('disconnect', () => {
-//     console.log('Client disconnected');
-//   });
-// });
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
@@ -63,4 +73,4 @@ dbConfig.connection.on('error', (err) => {
   process.exit(1); // Exit the process with an error code
 });
 
-// module.exports = { io };
+module.exports = { io };
