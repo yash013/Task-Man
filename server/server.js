@@ -21,7 +21,8 @@ const dbConfig = require("./config/dbConfig");
 
 app.use(cors({
   origin: 'https://task-man-pi.vercel.app/',
-  methods: ['GET', 'POST', 'UPDATE', 'DELETE'] // or your client's URL
+  methods: ['GET', 'POST', 'UPDATE', 'DELETE'] ,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // console.log("MongoDB_URI:", process.env.MONGODB_URI);
