@@ -6,7 +6,7 @@ const app = express();
 const server = http.createServer(app);
 // const io = socketIo(server);
 // console.log(process.env);
-
+const cors = require('cors');
 const io = socketIo(server, {
   cors: {
     origin: "https://task-man-pi.vercel.app/" , // Use environment variable for client URL
@@ -18,7 +18,6 @@ app.use(express.json());
 
 const dbConfig = require("./config/dbConfig");
 const port = process.env.PORT || 5000;
-const cors = require('cors');
 
 app.use(cors({
   origin: 'https://task-man-pi.vercel.app/', // or your client's URL
