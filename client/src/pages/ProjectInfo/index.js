@@ -12,16 +12,21 @@ import Tasks from "./Tasks";
 function ProjectInfo() {
  
   const [currentUserRole, setCurrentUserRole] = useState("");
+  const { user } = useSelector((state) => state.users);
   const [project, setProject] = useState(null);
   const dispatch = useDispatch();
-  const {id} = useParams();
-  const getData = useCallback(async () => {
+  const params = useParams();
+  const getData = async () => {
     try {
       dispatch(SetLoading(true));
-      const response = await GetProjectById(id);
+      const response = await GetProjectById(params.id);
       dispatch(SetLoading(false));
       if (response.success) {
         setProject(response.data);
+        const currentUser = response.data.members.find(
+          (member) => member.user._id === user._id
+        );
+        setCurrentUserRole(currentUser.role);
       } else {
         throw new Error(response.message);
       }
@@ -29,14 +34,14 @@ function ProjectInfo() {
       dispatch(SetLoading(false));
       message.error(error.message);
     }
-  }, [dispatch, id]);
+  };
 
 
 
   useEffect(() => {
     getData();
    
-  }, [getData]);
+  }, []);
 
   return (
     project && (

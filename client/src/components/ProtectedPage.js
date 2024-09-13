@@ -6,7 +6,7 @@ import { GetLoggedInUser } from "../apicalls/users";
 import { SetNotifications, SetUser } from "../redux/usersSlice";
 import { SetLoading } from "../redux/loadersSlice";
 import { GetAllNotifications } from "../apicalls/notifications";
-import { Avatar, Badge } from "antd";
+import { Avatar, Badge, Space } from "antd";
 import Notifications from "./Notifications";
 
 function ProtectedPage({ children }) {
@@ -32,7 +32,7 @@ function ProtectedPage({ children }) {
     }
   };
 
-  const getNotifications = useCallback(async () => {
+  const getNotifications = async () => {
     try {
       dispatch(SetLoading(true));
       const response = await GetAllNotifications();
@@ -46,7 +46,7 @@ function ProtectedPage({ children }) {
       dispatch(SetLoading(false));
       message.error(error.message);
     }
-  }, [dispatch]);
+  };
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -54,13 +54,13 @@ function ProtectedPage({ children }) {
     } else {
       navigate("/login");
     }
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     if (user) {
       getNotifications();
     }
-  }, [user, getNotifications]);
+  }, [user]);
 
   return (
     user && (
