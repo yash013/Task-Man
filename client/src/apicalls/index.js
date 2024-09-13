@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'https://task-man-back.vercel.app',
+  baseURL: ['http://task-man-back.vercel.app/', 'https://task-man-back.vercel.app/', 'http://localhost:5000'],
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -22,7 +22,6 @@ export const apiRequest = async (method, url, payload) => {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error("API request error:", error.response || error);
     throw error;  // Rethrow the error so it can be caught and handled by the caller
   }
 };
