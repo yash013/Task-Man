@@ -9,7 +9,7 @@ const cors = require('cors');
 const corsOptions = {
   origin: ['https://task-man-pi.vercel.app', 'http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type'],
   credentials: true,
   optionsSuccessStatus: 200
 };
