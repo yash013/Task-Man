@@ -21,8 +21,6 @@ const port = process.env.PORT || 5000;
 
 app.use(cors({
   origin: 'https://task-man-pi.vercel.app/', // or your client's URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 // console.log("MongoDB_URI:", process.env.MONGODB_URI);
@@ -38,10 +36,9 @@ app.use("/api/tasks", tasksRoute);
 app.use("/api/notifications", notificationsRoute);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
-// deployment config
 const path = require("path");
 __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 
 io.on('connection', (socket) => {
