@@ -9,7 +9,7 @@ const dbConfig = require("./config/dbConfig");
 // const port = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || "https://task-man-pi.vercel.app/login", // Use environment variable for client URL
+  origin: process.env.CLIENT_URL || "https://task-man-75wp5fmcd-yash013s-projects.vercel.app", // Use environment variable for client URL
   methods: ['GET', 'POST', 'PUT', 'UPDATE', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
