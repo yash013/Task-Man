@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 // console.log(process.env);
-const uri = process.env.MONGODB_URI;
+// const uri = process.env.MONGODB_URI;
+const uri = "mongodb+srv://taskmanpro:admin%40123@taskmanpro01.02uut.mongodb.net/?retryWrites=true&w=majority&appName=taskmanpro"
 // console.log(uri);
 if (!uri) {
     console.error("Error: MONGODB_URI environment variable is not set.");
