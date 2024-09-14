@@ -9,7 +9,7 @@ const server = http.createServer(app);
 const cors = require('cors');
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:3000", // Use environment variable for client URL
+    origin: "https://task-man-pi.vercel.app" // Use environment variable for client URL
     methods: ['GET', 'POST'],
   },
 });
@@ -20,7 +20,7 @@ const dbConfig = require("./config/dbConfig");
 const port = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: "https://task-man-pi.vercel.app",
   methods: ['GET', 'POST', 'UPDATE', 'DELETE'] ,
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
