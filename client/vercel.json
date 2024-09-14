@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "rewrites": [
+       {
+         "source": "/api/(.*)",
+         "destination": "https://task-man-back.vercel.com/api/$1"
+       }
+     ]
+}
