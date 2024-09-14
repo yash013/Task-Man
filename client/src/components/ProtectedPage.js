@@ -67,7 +67,7 @@ function ProtectedPage({ children }) {
       <div>
         <div className="flex justify-between items-center bg-primary text-white px-5 py-4">
           <h1 className="text-2xl cursor-pointer" onClick={() => navigate("/")}>
-            Task-Master
+            Task-Man
           </h1>
 
           <div className="flex items-center bg-white px-5 py-2 rounded">

@@ -1,61 +1,39 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require('cors');
-const authMiddleware = require('./authMiddleware');
-
 const app = express();
-
-const corsOptions = {
-  origin: ['https://task-man-pi.vercel.app', 'http://localhost:3000'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  optionsSuccessStatus: 204
-};
-
-// Apply CORS middleware before any routes
-app.use(cors(corsOptions));
-
-// Handle OPTIONS requests explicitly
-app.options('*', (req, res) => {
-  res.header('Access-Control-Allow-Origin', req.headers.origin);
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.sendStatus(204);
-});
 
 app.use(express.json());
 
-// Debug logging
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-  console.log('Headers:', req.headers);
-  next();
-});
+const dbConfig = require("./config/dbConfig");
+const port = process.env.PORT || 5000;
 
-// Apply auth middleware to protected routes
-app.use("/api/projects", authMiddleware, projectsRoute);
-app.use("/api/tasks", authMiddleware, tasksRoute);
-app.use("/api/notifications", authMiddleware, notificationsRoute);
+app.use(cors({
+  origin: process.env.CLIENT_URL, // Use environment variable for client URL
+  methods: ['GET', 'POST', 'UPDATE', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// The login route should not use auth middleware
+const usersRoute = require("./routes/usersRoute");
+const projectsRoute = require("./routes/projectsRoute");
+const tasksRoute = require("./routes/tasksRoute");
+const notificationsRoute = require("./routes/notificationsRoute");
+
 app.use("/api/users", usersRoute);
+app.use("/api/projects", projectsRoute);
+app.use("/api/tasks", tasksRoute);
+app.use("/api/notifications", notificationsRoute);
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+// Remove static file serving for React app
+// Vercel will handle this
+
+// Remove Socket.IO setup
+// Consider using a dedicated WebSocket service
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
-
-// ... rest of your server.js code
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(dirname, "/client/build")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(dirname, "client", "build", "index.html"));
-  });
-}
-
 
 dbConfig.connection.on('connected', () => {
   console.log('MongoDB connected');
@@ -65,3 +43,75 @@ dbConfig.connection.on('error', (err) => {
   console.error('MongoDB connection error: ', err);
   process.exit(1); // Exit the process with an error code
 });
+
+// require("dotenv").config();
+// const express = require("express");
+// const http = require("http");
+// const socketIo = require('socket.io');
+// const app = express();
+// const server = http.createServer(app);
+// // const io = socketIo(server);
+// // console.log(process.env);
+// const cors = require('cors');
+// const io = socketIo(server, {
+//   cors: {
+//     origin: "http://localhost:3000", // Use environment variable for client URL
+//     methods: ['GET', 'POST'],
+//   },
+// });
+
+// app.use(express.json());
+
+// const dbConfig = require("./config/dbConfig");
+// const port = process.env.PORT || 5000;
+
+// app.use(cors({
+//   origin: "http://localhost:3000",
+//   methods: ['GET', 'POST', 'UPDATE', 'DELETE'] ,
+//   allowedHeaders: ['Content-Type', 'Authorization']
+// }));
+
+// // console.log("MongoDB_URI:", process.env.MONGODB_URI);
+
+// const usersRoute = require("./routes/usersRoute");
+// const projectsRoute = require("./routes/projectsRoute");
+// const tasksRoute = require("./routes/tasksRoute");
+// const notificationsRoute = require("./routes/notificationsRoute");
+
+// app.use("/api/users", usersRoute);
+// app.use("/api/projects", projectsRoute);
+// app.use("/api/tasks", tasksRoute);
+// app.use("/api/notifications", notificationsRoute);
+
+// // Serve static files from the React app
+// const path = require("path");
+// dirname = path.resolve();
+// app.use(express.static(path.join(dirname, 'client/build')));
+
+// io.on('connection', (socket) => {
+//   console.log('New client connected');
+
+//   socket.on('disconnect', () => {
+//     console.log('Client disconnected');
+//   });
+// });
+
+// server.listen(port, () => {
+//   console.log(`Server is running on port ${port}`);
+// });
+
+// dbConfig.connection.on('connected', () => {
+//   console.log('MongoDB connected');
+// });
+
+// dbConfig.connection.on('error', (err) => {
+//   console.error('MongoDB connection error: ', err);
+//   process.exit(1); // Exit the process with an error code
+// });
+
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(dirname, "/client/build")));
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.join(dirname, "client", "build", "index.html"));
+//   });
+// }
