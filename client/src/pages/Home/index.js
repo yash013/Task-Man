@@ -36,7 +36,7 @@ function Home() {
   return (
     <div>
       <h1 className="text-primary text-gray-300 text-xl">
-        Heyy {user?.firstName} {user?.lastName} , Welcome to Task-Master
+        Heyy {user?.firstName} {user?.lastName} , Welcome to Task-Man
       </h1>
 
       <div className="grid grid-cols-4 gap-5 mt-5">
