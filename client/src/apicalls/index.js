@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: SERVER_URL,
+  baseURL: process.env.SERVER_URL,
 });
 
 export const apiRequest = async (method, url, payload) => {
