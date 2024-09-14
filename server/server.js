@@ -10,7 +10,7 @@ const dbConfig = require("./config/dbConfig");
 
 app.use(cors({
   origin: process.env.CLIENT_URL, // Use environment variable for client URL
-  methods: ['GET', 'POST', 'UPDATE', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'UPDATE', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
@@ -23,6 +23,7 @@ app.use("/api/users", usersRoute);
 app.use("/api/projects", projectsRoute);
 app.use("/api/tasks", tasksRoute);
 app.use("/api/notifications", notificationsRoute);
+
 
 // Consider using a dedicated WebSocket service
 
