@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 const dbConfig = require("./config/dbConfig");
-const port = process.env.PORT || 5000;
+// const port = process.env.PORT || 5000;
 
 app.use(cors({
   origin: process.env.CLIENT_URL, // Use environment variable for client URL
@@ -24,16 +24,12 @@ app.use("/api/projects", projectsRoute);
 app.use("/api/tasks", tasksRoute);
 app.use("/api/notifications", notificationsRoute);
 
-// Remove static file serving for React app
-// Vercel will handle this
-
-// Remove Socket.IO setup
 // Consider using a dedicated WebSocket service
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server is running on port ${port}`);
+// });
 
 dbConfig.connection.on('connected', () => {
   console.log('MongoDB connected');
