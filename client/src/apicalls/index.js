@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'https://task-man-0.vercel.app/', // Use environment variable
+  baseURL: process.env.REACT_APP_API_URL || 'https://task-man-0.vercel.app/',
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
