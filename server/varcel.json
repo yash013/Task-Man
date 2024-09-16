@@ -9,7 +9,7 @@
     "rewrites": [
       {
         "source": "/api/(.*)",
-        "destination": "https://task-man-back.vercel.com/api/$1"
+        "destination": "https://task-man-0.vercel.com/api/$1"
       },
       {
         "source": "/(.*)",
