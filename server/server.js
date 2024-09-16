@@ -7,7 +7,7 @@ const server = http.createServer(app);
 // const io = socketIo(server);
 // console.log(process.env);
 
-// const cors = require('cors');
+const cors = require('cors');
 const io = socketIo(server, {
   cors: {
     origin: "https://task-man-pi.vercel.app/",
@@ -27,7 +27,7 @@ const dbConfig = require("./config/dbConfig");
 const port = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: "https://task-man-pi.vercel.app/login",
+  origin: "https://task-man-pi.vercel.app/",
   methods: ['GET', 'POST', 'UPDATE', 'DELETE'] ,
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
