@@ -26,11 +26,11 @@ app.use((req, res, next) => {
 const dbConfig = require("./config/dbConfig");
 const port = process.env.PORT || 5000;
 
-// app.use(cors({
-//   origin: "https://task-man-pi.vercel.app/login",
-//   methods: ['GET', 'POST', 'UPDATE', 'DELETE'] ,
-//   allowedHeaders: ['Content-Type', 'Authorization']
-// }));
+app.use(cors({
+  origin: "https://task-man-pi.vercel.app/login",
+  methods: ['GET', 'POST', 'UPDATE', 'DELETE'] ,
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // console.log("MongoDB_URI:", process.env.MONGODB_URI);
 
