@@ -9,7 +9,7 @@ const server = http.createServer(app);
 const cors = require('cors');
 const io = socketIo(server, {
   cors: {
-    origin: "https://task-man-pi.vercel.app" // Use environment variable for client URL
+    origin: "https://task-man-pi.vercel.app",
     methods: ['GET', 'POST'],
   },
 });
