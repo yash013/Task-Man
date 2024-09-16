@@ -5,7 +5,7 @@ const uri = process.env.MONGODB_URI;
 // console.log(uri);
 if (!uri) {
     console.error("Error: MONGODB_URI environment variable is not set.");
-    process.exit(1); // Exit the process with an error code
+    process.exit(1);
 }
 
 mongoose.connect(uri);
